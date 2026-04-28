@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/estoque_monitor/__init__.py
+src/estoque_monitor/config.py
+src/estoque_monitor/dashboard.py
+src/estoque_monitor/db.py
+src/estoque_monitor/export_powerbi.py
+src/estoque_monitor/inventory.py
+src/estoque_monitor/main.py
+src/estoque_monitor/notifier.py
+src/estoque_monitor.egg-info/PKG-INFO
+src/estoque_monitor.egg-info/SOURCES.txt
+src/estoque_monitor.egg-info/dependency_links.txt
+src/estoque_monitor.egg-info/requires.txt
+src/estoque_monitor.egg-info/top_level.txt

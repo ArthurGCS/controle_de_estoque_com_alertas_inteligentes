@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "estoque-monitor"
+version = "0.1.0"
+description = "Monitor de estoque com alertas por SMTP ou WhatsApp."
+requires-python = ">=3.10"
+dependencies = [
+  "pandas==2.2.3",
+  "SQLAlchemy==2.0.36",
+  "PyMySQL==1.1.1",
+  "python-dotenv==1.0.1",
+  "requests==2.32.3",
+  "openpyxl==3.1.5",
+  "streamlit==1.41.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]

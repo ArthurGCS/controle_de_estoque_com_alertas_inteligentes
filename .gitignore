@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+logs/*.log
+data/*.csv
+data/*.xlsx
+powerbi/data/*.csv
+powerbi/data/*.xlsx

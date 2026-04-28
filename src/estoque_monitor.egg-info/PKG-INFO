@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: estoque-monitor
+Version: 0.1.0
+Summary: Monitor de estoque com alertas por SMTP ou WhatsApp.
+Requires-Python: >=3.10
+Requires-Dist: pandas==2.2.3
+Requires-Dist: SQLAlchemy==2.0.36
+Requires-Dist: PyMySQL==1.1.1
+Requires-Dist: python-dotenv==1.0.1
+Requires-Dist: requests==2.32.3
+Requires-Dist: openpyxl==3.1.5
+Requires-Dist: streamlit==1.41.1
