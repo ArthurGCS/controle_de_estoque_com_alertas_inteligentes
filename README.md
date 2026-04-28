@@ -1,154 +1,121 @@
-# Monitor de Estoque com Alertas
+# 📦 Controle de Estoque com Alertas Inteligentes
 
-Sistema em Python + Pandas que consulta o estoque no MySQL, identifica produtos abaixo do minimo e envia alertas automaticos por e-mail SMTP ou WhatsApp API. Tambem exporta bases prontas para uso no Power BI.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
 
-## Estrutura
+> Um sistema automatizado para monitoramento pró-ativo de estoque, envio de alertas inteligentes (E-mail e WhatsApp) e visualização de dados em tempo real. Desenvolvido para resolver o problema de ruptura de estoque (stockout) e auxiliar na tomada de decisões rápidas de reposição.
 
-- `sql/schema.sql`: tabelas, indices e views do MySQL.
-- `sql/seed.sql`: dados de exemplo para testar.
-- `src/estoque_monitor/main.py`: rotina principal de monitoramento.
-- `src/estoque_monitor/export_powerbi.py`: exporta CSV/XLSX para dashboard.
-- `src/estoque_monitor/dashboard.py`: dashboard Python em navegador com Streamlit.
-- `powerbi/dashboard_model.md`: sugestao de modelo, medidas e visuais.
-- `.env.example`: variaveis de ambiente.
+---
 
-## Instalacao
+## 🎯 O Problema que este projeto resolve
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-pip install -e .
-Copy-Item .env.example .env
-```
+Na gestão de suprimentos e varejo, descobrir que um produto acabou apenas quando o cliente tenta comprar (ou quando a produção para) gera prejuízos e insatisfação. 
+Este projeto atua de forma **preventiva**: monitora o banco de dados de estoque de forma contínua e notifica os responsáveis *antes* que o produto falte, além de fornecer dashboards analíticos para a equipe gerencial.
 
-Edite o arquivo `.env` com o acesso ao MySQL e ao canal de alerta.
+---
 
-## Banco de dados
+## ✨ Principais Funcionalidades
 
-Crie o schema e carregue dados de teste:
+- **Monitoramento Contínuo:** Consulta o banco de dados (MySQL) para identificar produtos que atingiram ou estão abaixo do nível mínimo de segurança.
+- **Alertas Multicanal:** Disparo automatizado de notificações via **E-mail (SMTP)** e **WhatsApp (API)** para os gestores responsáveis.
+- **Dashboard Web (Streamlit):** Interface intuitiva em Python rodando direto no navegador para acompanhamento em tempo real dos níveis de estoque, valor imobilizado e histórico de alertas.
+- **Integração com Power BI:** Exportação de bases tratadas (CSV/XLSX) e views prontas no MySQL para criação de relatórios gerenciais avançados.
+- **Prevenção de Spam:** Sistema inteligente que registra alertas anteriores (tabela `alert_history`) para evitar envios duplicados no mesmo intervalo de horas.
 
-```powershell
-mysql -u root -p < sql/schema.sql
-mysql -u root -p estoque_monitor < sql/seed.sql
-```
+---
 
-## Executar o monitor
+## 📸 Demonstração
 
-O `.env.example` vem com `DRY_RUN=true`, entao a primeira execucao apenas mostra o que seria enviado.
+*(Adicione aqui um GIF ou prints da tela do Dashboard Streamlit e do Power BI. Exemplos do que adicionar:)*
+- **[Print 1]** Tela inicial do Dashboard Streamlit mostrando os KPIs.
+- **[Print 2]** Exemplo de notificação de alerta chegando no WhatsApp/E-mail.
+- **[Print 3]** Relatório gerencial no Power BI.
 
-```powershell
-.\.venv\Scripts\python.exe -m estoque_monitor.main
-```
+---
 
-Evite executar o arquivo diretamente com `src\estoque_monitor\main.py`, porque nesse modo o Python pode nao encontrar o pacote `estoque_monitor`. Use sempre `-m estoque_monitor.main` a partir da raiz do projeto.
+## 🏗️ Arquitetura e Tecnologias
 
-## Solucao de problemas
+O sistema é dividido em três camadas principais:
+1. **Banco de Dados (MySQL):** Armazena produtos, movimentações de estoque (entradas e saídas) e histórico de alertas. Utiliza `Views` estruturadas para facilitar consultas analíticas.
+2. **Motor de Processamento (Python + Pandas):** Roda em segundo plano (agendado via Task Scheduler/Cron). Conecta ao banco, calcula os níveis atuais cruzando entradas e saídas, verifica regras de negócio e realiza integrações com APIs de mensageria.
+3. **Visualização:** 
+   - **Streamlit:** Dashboard web interativo e rápido para a operação diária.
+   - **Power BI:** Conexão direta ao banco ou via arquivos gerados para análise aprofundada (Business Intelligence).
 
-### `ModuleNotFoundError: No module named 'estoque_monitor'`
+---
 
-Execute pela raiz do projeto e use o Python da `.venv`:
+## 🚀 Como Executar Localmente
 
-```powershell
-.\.venv\Scripts\python.exe -m estoque_monitor.main
-```
+### Pré-requisitos
+- Python 3.9+
+- Servidor MySQL rodando local (ou nuvem)
 
-Se ainda aparecer, instale o pacote no ambiente:
+### Passo a Passo
 
-```powershell
-.\.venv\Scripts\python.exe -m pip install -e .
-```
+1. **Clone o repositório e configure o ambiente virtual:**
+   ```powershell
+   git clone https://github.com/SEU_USUARIO/controle-estoque-alertas.git
+   cd controle-estoque-alertas
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   pip install -e .
+   ```
 
-### `Can't connect to MySQL server on 'localhost'` ou `WinError 10061`
+2. **Configuração de Variáveis de Ambiente:**
+   Copie o arquivo de exemplo e configure suas credenciais de banco e APIs:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+   *(Edite o arquivo `.env` gerado com os dados do MySQL e credenciais de SMTP/WhatsApp).*
 
-Esse erro indica que nao existe MySQL aceitando conexoes em `localhost:3306`. Verifique:
+3. **Banco de Dados:**
+   Crie as tabelas e popule com os dados de teste fornecidos:
+   ```powershell
+   mysql -u root -p < sql/schema.sql
+   mysql -u root -p estoque_monitor < sql/seed.sql
+   ```
 
-```powershell
-Get-Service | Where-Object { $_.Name -match 'mysql|maria' -or $_.DisplayName -match 'mysql|maria' }
-```
+4. **Rodando o Dashboard Web:**
+   Execute o script prático:
+   ```powershell
+   .\scripts\run_dashboard.ps1
+   ```
+   *O painel abrirá automaticamente em `http://localhost:8501`.*
 
-Se existir um servico como `MySQL80`, inicie-o em um PowerShell como administrador:
+5. **Testando o Monitor de Alertas:**
+   O modo `DRY_RUN=true` vem ativado por padrão no `.env` para simular os envios no console sem disparar mensagens reais.
+   ```powershell
+   .\.venv\Scripts\python.exe -m estoque_monitor.main
+   ```
 
-```powershell
-Start-Service MySQL80
-```
+---
 
-Se nenhum servico aparecer, instale o MySQL Server ou use uma instancia existente alterando `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD` e `MYSQL_DATABASE` no arquivo `.env`.
+## 📊 Exportação para Power BI
 
-Para enviar de verdade, configure SMTP ou WhatsApp e altere:
-
-```env
-DRY_RUN=false
-```
-
-## Exportar dados para o Power BI
-
+Para atualizar as bases estáticas consumidas pelo Power BI:
 ```powershell
 .\.venv\Scripts\python.exe -m estoque_monitor.export_powerbi
 ```
+*Os arquivos CSV tratados estarão disponíveis na pasta `powerbi/data/`.*
 
-Os arquivos serao gerados em `powerbi/data/`. No Power BI Desktop, use **Obter dados > Texto/CSV** e importe:
+---
 
-- `inventory_status.csv`
-- `alerts_history.csv`
-- `stock_movements.csv`
-- `products.csv`
+## 💡 Próximos Passos (Evoluções Possíveis)
+- [ ] Implementar previsão de demanda utilizando Machine Learning (ex: Prophet/Scikit-learn).
+- [ ] Criar API REST (FastAPI) para receber novas movimentações de estoque de outros sistemas (ERPs, PDVs).
+- [ ] Containerizar a aplicação completa com Docker e Docker Compose.
 
-Tambem e possivel conectar direto no MySQL usando as views `v_inventory_status` e `v_stock_movements_enriched`.
+---
 
-## Dashboard Python no navegador
+## 👨‍💻 Autor
 
-O projeto tambem tem um dashboard em Python com Streamlit. Ele pode ler o MySQL ao vivo ou os CSVs gerados em `powerbi/data/`.
+**Arthur Silva**
 
-Instale as dependencias atualizadas:
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEU_LINKEDIN_AQUI)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SEU_GITHUB_AQUI)
 
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m pip install -e .
-```
-
-Abra o dashboard:
-
-```powershell
-.\scripts\run_dashboard.ps1
-```
-
-Se o PowerShell bloquear scripts por politica de execucao, use o `.bat`:
-
-```powershell
-.\scripts\run_dashboard.bat
-```
-
-Ou rode o `.ps1` com bypass apenas para este comando:
-
-```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".\scripts\run_dashboard.ps1"
-```
-
-O Streamlit abrira o navegador automaticamente. Se preferir abrir manualmente, acesse:
-
-```text
-http://localhost:8501
-```
-
-Tambem da para rodar sem o script:
-
-```powershell
-.\.venv\Scripts\python.exe -m streamlit run src\estoque_monitor\dashboard.py
-```
-
-## Agendamento
-
-No Windows Task Scheduler, crie uma tarefa para rodar a cada hora:
-
-```powershell
-powershell.exe -ExecutionPolicy Bypass -File "C:\Users\Arthur Silva\Documents\New project\scripts\run_monitor.ps1"
-```
-
-## Como funciona
-
-1. O script calcula o estoque atual a partir de `stock_movements`.
-2. Produtos ativos com `current_stock <= minimum_stock` entram no alerta.
-3. O historico em `alert_history` evita repetir alertas dentro de `ALERT_REPEAT_HOURS`.
-4. O alerta e enviado pelos canais configurados em `ALERT_CHANNELS`.
-5. As views e exports alimentam o dashboard do Power BI.
+*Se você achou este projeto interessante, sinta-se à vontade para deixar uma ⭐️ no repositório e me adicionar no LinkedIn para conversarmos sobre Python, Dados e Automação!*

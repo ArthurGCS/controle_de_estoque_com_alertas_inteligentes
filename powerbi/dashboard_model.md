@@ -43,4 +43,4 @@ COUNTROWS(FILTER(alerts_history, alerts_history[status] = "sent"))
 - Tabela: SKU, Produto, Fornecedor, Estoque Atual, Minimo, Reposicao Sugerida, Status.
 - Grafico de barras: Produtos em baixo estoque por categoria.
 - Linha temporal: movimentacoes por data e tipo.
-- Segmentadores: Categoria, Fornecedor, Status.
+- Segmentadores: CategNew projectoria, Fornecedor, Status.
